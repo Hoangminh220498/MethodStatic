@@ -3,75 +3,142 @@ package basic.dev;
 import java.util.Scanner;
 
 public class MainApp {
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		Scanner sc = new Scanner(System.in);
+		/**
+		 * Ham tinh exp x
+		 */
+		public static double exp(double x) {
+			int n = 0, k = 5;
+			double prev, current = 0;
+			double esp = Math.pow(10, -k);
+			prev = current;
+			current += Math.pow(x, n) / factorial(n, 1);
+			while(Math.abs(current - prev) > esp) {
+				n++;
+				prev = current;
+				current += Math.pow(x, n) / factorial(n,1);
+			}
+			return current;
+		}
 		
-			float x;
-			int k;
-			double sum = 0;
-			int i = 0;
+		/**
+		 * ham tinh 1/(1+x)^3
+		 */
+		public static double caub(double x) {
+			int n = 0, k = 5;
+			double prev, current = 0;
+			int sign = 1;
+			double esp = Math.pow(10, -k);
+			prev = current;
+			current += sign * Math.pow(x, n) * ((n+1)*(n+2))/2;
 			
+			while(Math.abs(current - prev) >= esp) {
+				sign = -sign;
+				n++;
+				prev = current;
+				current += sign * Math.pow(x, n) * ((n+1)*(n+2))/2;
+			}
+			return current;
+		}
+		
+		/**
+		 * Ham tinh ln(1-x)
+		 */
+		public static double log(double x) {
+			int n = 0, k = 5;
+			double esp = Math.pow(10, -k);
+			double prev, current = 0;
+			prev = current;
+			current -= (Math.pow(x, n+1) / (n+1));
+			while(Math.abs(prev - current) >= esp) {
+				n++;
+				prev = current;
+				current -= (Math.pow(x, n+1) / (n+1));
+			}
+			return current;
+		}
+		/**
+		 * Ham tinh 1/sqrt(1+x)
+		 */
+		
+		public static double sqrtoneplusx( double x) {
+			int n = 1 , sign = -1 , k = 6;
+			double esp = Math.pow(10, -k);
+			double prev, current = 1;
+			prev = current;
+			current += sign * Math.pow(x, n) * factorial(2*n-1, 2) / factorial(2*n,2);
 			
+			while(Math.abs(current - prev) > esp) {
+				n++;
+				sign = -sign ;
+				prev = current;
+				current += sign * Math.pow(x, n) * factorial(2*n-1, 2) / factorial(2*n,2);	
+			}
+			return current;
+		}
+		/**
+		 * sin(x)
+		 */
+		public static double sin(double x) {
+			int sign = 1, n = 1 , k = 5;
+			double prev, current = 0;
+			double esp = Math.pow(10, -k);
+			prev = current;
+			current += sign*Math.pow(x, n)/factorial(n,1);
+			while(Math.abs(prev - current) >= esp) {
+				sign = -sign;
+				n +=2;
+				prev = current;
+				current += sign*Math.pow(x, n)/factorial(n,1);
+			}
+			return current;
+		}
+		/**
+		 * Cos(x)
+		 */
+		public static double cos(double x) {
+			int sign = 1, n = 0 , k = 5;
+			double prev, current = 0;
+			double esp = Math.pow(10, -k);
+			prev = current;
+			current += sign*Math.pow(x, n)/factorial(n);
+			while(Math.abs(prev - current) >= esp) {
+				sign = -sign;
+				n += 2;
+				prev = current;
+				current += sign*Math.pow(x, n)/factorial(n);
+			}
+			return current;
+		}
+		private static long factorial(int n, Integer ...params) {
+			
+			int step = params.length == 0 ? 1 : params[0].intValue();
+			if(n == 0 || n == 1) 
+				return 1;
+			return n *  factorial(n - step, step);
+		}
+
+		public static void main(String[] args) {
+			// TODO Auto-generated method stub
+			Scanner sc = new Scanner(System.in);
 			System.out.println("Nhap x = ");
-			x = sc.nextFloat();
-			System.out.println("Nhap k = ");
-			k = sc.nextInt();
+			double x = sc.nextDouble();
+			System.out.println("Bai so 1:");
+			System.out.format("Exp(%f) = %.3f", x, exp(x)).println();
 			
-			while((Math.pow(x, i)/factorial(i)) >= (1/Math.pow(10, k))){
-				sum += (Math.pow(x, i)/factorial(i));
-				i++;
-			}
-			System.out.println("Bai 15.1 ham e^x:");
-			System.out.println("e^x= "  + String.format("%.4g%n", Math.exp(x)));
-			System.out.println("result = " + String.format("%.4g%n", sum));
-			System.out.println("Bang nhau");
-		
+			System.out.println("Bai so 2:");
+			System.out.format("1/(1+%f)^3 = %.3f", x, caub(x)).println();
 			
-		System.out.println("-------------------------");
-		System.out.println("Bai 15.2: Ham 1/(1+x^3)");
-		
-		
-		i=1;
-		sum = 0;
-		int iplus=2;
-		int iminus = 0;
-		
-		while(((i*iplus)/2)*Math.pow(x, iminus) >= (1/Math.pow(10, k)) ) {
-			if(i % 2 == 1) {
-				sum +=  ((i*iplus)/2)*Math.pow(x, iminus);
-			} else {
-				sum -=  ((i*iplus)/2)*Math.pow(x, iminus);
+			System.out.println("Bai so 3:");
+			System.out.format("ln(1 - %f) = %.3f", x, log(x)).println();
+			
+			System.out.println("Bai so 5:");
+			System.out.format("1/sqrt(1+%f) = %.3f", x, sqrtoneplusx(x)).println();
+			
+			System.out.println("Bai so 6:");
+			System.out.format("sin(%f) = %.3f", x, sin(x)).println();
+					
+			System.out.println("Bai so 7:");
+			System.out.format("cos(%f) = %.3f", x, cos(x)).println();
 			}
-			i++;
-			iminus++;
-			iplus++;
-		}
-		
-		
-		System.out.println(" 1 / (1+x)^3 = " + String.format("%.3g%n",  1/Math.pow((1+x), 3)));
-		System.out.println("result = " + String.format("%.3g%n", sum));
-		System.out.println(" Bang nhau ");
-		
-		
-		System.out.println("-------------------------");
-		System.out.println("Bai 15.3: Ham ln(1-x)");
-		
-		i=1;
-		sum = 0;
-		
-		while((Math.pow(x, i)/i) >= (1/Math.pow(10, k))) {
-			sum-= Math.pow(x, i)/i;
-			i++;
-		}
-		
-		System.out.println("ln(1-x) = " + String.format("%.3g%n", Math.log(1-x)));
-		System.out.println("result = " + String.format("%.3g%n", sum));
-		
-	}
-
-	private static double factorial(int i) {
-		// TODO Auto-generated method stub
-		return 0;
-	}}
+		}		
+	
